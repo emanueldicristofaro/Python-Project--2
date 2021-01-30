@@ -1,4 +1,4 @@
 from django.apps import AppConfig
 
-class PedidosConfig(AppConfig):
-    name = 'pedidos'
+class PollsConfig(AppConfig):
+    name = 'polls'
