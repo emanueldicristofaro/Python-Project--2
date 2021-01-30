@@ -66,17 +66,32 @@ class Pedido(models.Model):
     def sandwiches(self):
         return self.sandwich_set.all()
 
+    def bebidas(self):
+        return self.bebidas_set.all()
+
     def costoTotal(self):
-        cont = 0
-        for tot in self.sandwich_set.all():
-            cont = cont + tot.costo()
-        return cont
+
+        contS = 0
+        contB = 0
+
+        for totS in self.sandwich_set.all():
+            contS = contS + totS.costoSandwich()
+        
+        for totB in self.bebidas_set.all():
+            contB = contB + totB.getCostoBebida()
+
+        cantidadTotal = contS + contB
+
+        return cantidadTotal
 
     def __str__(self):
         return self.nombreCliente
     
     def cantidad_sandwiches(self):
         return len(self.sandwich_set.all())
+
+    def cantidad_bebidas(self):
+        return len(self.bebidas_set.all())
 
 #######################################################################
 
@@ -93,7 +108,7 @@ class Sandwich(models.Model):
     def cantidad_ingredientes(self):
         return len(self.sandwich_ingrediente_set.all())
 
-    def costo(self):
+    def costoSandwich(self):
         cont = 0
         for ing in self.sandwich_ingrediente_set.all().filter()[0:]:
             cont = cont + ing.id_ingrediente.getCostoIngrediente()
