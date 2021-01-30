@@ -54,6 +54,18 @@ class Bebida(models.Model):
     def __str__(self):
         return self.nombreBebida + " | " + str(self.costoBebida)
 
+    def bebidas(self):
+        return self.bebida_sandwich_set.all()
+
+    def cantidad_bebidas(self):
+        return len(self.bebida_sandwich_set.all())
+
+    def costoBebida(self):
+        cont = 0
+        for beb in self.bebida_sandwich_set.all().filter()[0:]:
+            cont = cont + beb.id_bebida.getCostoBebida()
+        return cont
+
 #######################################################################
 
 # Tabla pedido para almacenar la fecha del pedido y quien lo hizo (Cliente)
@@ -78,7 +90,7 @@ class Pedido(models.Model):
             contS = contS + totS.costoSandwich()
         
         for totB in self.bebidas_set.all():
-            contB = contB + totB.getCostoBebida()
+            contB = contB + totB.costoBebida()
 
         cantidadTotal = contS + contB
 
