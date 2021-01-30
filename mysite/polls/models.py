@@ -63,20 +63,20 @@ class Pedido(models.Model):
     fechaPedido = models.DateField('Fecha pedido')
     nombreCliente = models.CharField(max_length=300)
 
-    def pizzas(self):
-        return self.pizza_set.all()
+    def sandwiches(self):
+        return self.sandwich_set.all()
 
-    def costo_total(self):
+    def costoTotal(self):
         cont = 0
-        for tot in self.pizza_set.all():
+        for tot in self.sandwich_set.all():
             cont = cont + tot.costo()
         return cont
 
     def __str__(self):
-        return self.nombre_cliente
+        return self.nombreCliente
     
-    def cant_pizzas(self):
-        return len(self.pizza_set.all())
+    def cantidad_sandwiches(self):
+        return len(self.sandwich_set.all())
 
 #######################################################################
 
@@ -88,15 +88,16 @@ class Sandwich(models.Model):
     fk_tamano = models.ForeignKey(Tamano, on_delete=models.DO_NOTHING)
     
     def ingredientes(self):
-        return self.pizza_ingrediente_set.all()
-    def cant_ingredientes(self):
-        return len(self.pizza_ingrediente_set.all())
+        return self.sandwich_ingrediente_set.all()
+
+    def cantidad_ingredientes(self):
+        return len(self.sandwich_ingrediente_set.all())
 
     def costo(self):
         cont = 0
-        for ing in self.pizza_ingrediente_set.all().filter()[0:]:
-            cont = cont + ing.ingrediente_id.get_costo()
-        return cont + self.tamano_id.get_costo()
+        for ing in self.sandwich_ingrediente_set.all().filter()[0:]:
+            cont = cont + ing.id_ingrediente.getCostoIngrediente()
+        return cont + self.id_tamano.getCostoTamano()
 
 #######################################################################
 
