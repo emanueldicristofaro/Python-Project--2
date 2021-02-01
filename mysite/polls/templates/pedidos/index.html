@@ -34,7 +34,7 @@
                 <br>
                 {% for tamano in tamanos %}
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="size" id="size{{tamano.id_tamano}}">
+                  <input class="form-check-input" type="radio" name="size" value={{tamano.id_tamano}} id="size{{tamano.id_tamano}}">
                   <label class="form-check-label" for="small_size">
                     {{tamano.nombreTamano}} ({{tamano.costoTamano}})
                   </label>
@@ -46,7 +46,7 @@
                 <br>
                 {% for ingrediente in ingredientes %}
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value={{ingrediente.id_ingrediente}} id={{ingrediente.id_ingrediente}}>
+                  <input class="form-check-input" name="ingredients" type="checkbox" value={{ingrediente.id_ingrediente}} id={{ingrediente.id_ingrediente}}>
                   <label class="form-check-label" for="defaultCheck1">
                     {{ingrediente.nombreIngrediente}} ({{ingrediente.costoIngrediente}})
                   </label>
@@ -54,11 +54,22 @@
                 {% endfor %}
               </div>
               <div class="form-group">
+                <label for="size" class="form-label">Selecciona la bebida si deseas agregarla:</label>
+                <br>
+                {% for bebida in bebidas %}
+                <div class="form-check">
+                  <input class="form-check-input" name="drinks" type="checkbox" value={{bebida.id_bebida}} id={{bebida.id_bebida}}>
+                  <label class="form-check-label" for="defaultCheck1">
+                    {{bebida.nombreBebida}} ({{bebida.costoBebida}})
+                  </label>
+                </div>
+                {% endfor %}
+              </div>
+              <div class="form-group">
                 <div class="col-12 d-flex flex-row-reverse">
-                  <input type="hidden" name="pedidoID" value="{{pedido_id}}">
-                  <button type="submit" class="btn btn-outline-success " name="action" value="end">Finalizar
+                  <button type="submit" class="btn btn-outline-success " name="actionbtn" value="end">Finalizar
                     pedido</button>
-                  <button type="submit" class="btn btn-outline-primary mr-1" name="action" value="add">Añadir otro
+                  <button type="submit" class="btn btn-outline-primary mr-1" name="actionbtn" value="add">Añadir otro
                     sandwich</button>
                 </div>
               </div>
