@@ -47,61 +47,15 @@
   <div class="container py-5">
     <div class="row">
       <div class="col-md-12">
-        <h2 class="text-center mb-5">¡Bienvenidos a Sandwiches Guns N Roses!</h2>
+        <h2 class="text-center mb-5">Ventas por ingredientes</h2>
         <div class="row">
           <div class="col-md-10 offset-md-1">
             <span class="anchor" id="formComplex"></span>
             <hr class="my-5">
-            <h3>Realiza tu pedido</h3>
+            <h3>Detalles</h3>
             <br>
             {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-            <form action="" method="post">
-              {% csrf_token %}
-              <div class="form-group">
-                <label for="size" class="form-label">Selecciona un tamaño:</label>
-                <br>
-                {% for tamano in tamanos %}
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="size" value={{tamano.id_tamano}} id="size{{tamano.id_tamano}}">
-                  <label class="form-check-label" for="small_size">
-                    {{tamano.nombreTamano}} ({{tamano.costoTamano}})
-                  </label>
-                </div>
-                {% endfor %}
-              </div>
-              <div class="form-group">
-                <label for="size" class="form-label">Selecciona los ingredientes que deseas agregarle:</label>
-                <br>
-                {% for ingrediente in ingredientes %}
-                <div class="form-check">
-                  <input class="form-check-input" name="ingredients" type="checkbox" value={{ingrediente.id_ingrediente}} id={{ingrediente.id_ingrediente}}>
-                  <label class="form-check-label" for="defaultCheck1">
-                    {{ingrediente.nombreIngrediente}} ({{ingrediente.costoIngrediente}})
-                  </label>
-                </div>
-                {% endfor %}
-              </div>
-              <div class="form-group">
-                <label for="size" class="form-label">Selecciona la bebida si deseas agregarla:</label>
-                <br>
-                {% for bebida in bebidas %}
-                <div class="form-check">
-                  <input class="form-check-input" name="drinks" type="checkbox" value={{bebida.id_bebida}} id={{bebida.id_bebida}}>
-                  <label class="form-check-label" for="defaultCheck1">
-                    {{bebida.nombreBebida}} ({{bebida.costoBebida}})
-                  </label>
-                </div>
-                {% endfor %}
-              </div>
-              <div class="form-group">
-                <div class="col-12 d-flex flex-row-reverse">
-                  <button type="submit" class="btn btn-outline-success " name="actionbtn" value="end">Finalizar
-                    pedido</button>
-                  <button type="submit" class="btn btn-outline-primary mr-1" name="actionbtn" value="add">Añadir otro
-                    sandwich</button>
-                </div>
-              </div>
-            </form>
+            
           </div>
         </div>
         <!--/row-->

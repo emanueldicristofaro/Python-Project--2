@@ -36,9 +36,57 @@ def index(request):
 
 #######################################################################
 
-# Metodo para insertar el pedido final.
+# Factura
 #######################################################################
+
+def factura(request):
+
+    return render(request, 'pedidos/factura.html')
 
 #######################################################################
 
+# Ventas
+#######################################################################
+
+def ventas(request):
+
+    return render(request, 'pedidos/ventas.html')
+
+#######################################################################
+
+# Ventas por dias
+#######################################################################
+
+def ventasDias(request):
+
+    return render(request, 'pedidos/ventas_dias.html')
+
+#######################################################################
+
+# Ventas por ingredientes
+#######################################################################
+
+def ventasIngredientes(request):
+
+    return render(request, 'pedidos/ventas_ingredientes.html')
+
+#######################################################################
+
+# Ventas por tamano
+#######################################################################
+
+def ventasTamano(request):
+
+    return render(request, 'pedidos/ventas_tamanos.html')
+
+#######################################################################
+
+# Ventas por tamano
+#######################################################################
+
+def ventasClientes(request):
+
+    return render(request, 'pedidos/ventas_clientes.html')
+
+#######################################################################
 
