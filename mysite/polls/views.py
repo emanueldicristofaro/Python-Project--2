@@ -1,5 +1,9 @@
 from django.shortcuts import render
-from .models import Tamano, Ingrediente, Bebida
+from .models import Tamano, Ingrediente, Bebida, Sandwich, Sandwich_Ingrediente, Bebida_Sandwich
+
+
+# Pagina principal para que se traiga toda la data y las opciones de pedido
+#######################################################################
 
 pedido = list()
 
@@ -29,3 +33,12 @@ def index(request):
     bebidas = Bebida.objects.all()
     contex = {'tamanos': tamanos, 'ingredientes': ingredientes, 'bebidas' : bebidas}
     return render(request, 'pedidos/index.html', contex)
+
+#######################################################################
+
+# Metodo para insertar el pedido final.
+#######################################################################
+
+#######################################################################
+
+
