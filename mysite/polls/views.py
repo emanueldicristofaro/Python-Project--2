@@ -97,13 +97,15 @@ def insertPedido(pedido):
     return idCliente
 
 def index(request):
+    return render(request, 'pedidos/index.html')
 
+def catalogo(request):
+    cliente = request.POST['client']
     if request.method == 'POST':
 
         tamano = request.POST.get("size")
         lista_ingredientes = request.POST.getlist('ingredients')
         lista_bebidas = request.POST.getlist('drinks')
-
         if request.POST.get("actionbtn") == "end":
             
             #Realizar el insert
@@ -132,7 +134,7 @@ def index(request):
     ingredientes = Ingrediente.objects.all()
     bebidas = Bebida.objects.all()
     contex = {'tamanos': tamanos, 'ingredientes': ingredientes, 'bebidas' : bebidas}
-    return render(request, 'pedidos/index.html', contex)
+    return render(request, 'pedidos/catalogo.html', contex)
 
 #######################################################################
 

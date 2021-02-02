@@ -4,6 +4,7 @@ from . import views
 app_name = 'polls'
 urlpatterns = [
     path('', views.index, name='index'),
+    path('catalogo/', views.catalogo, name='catalogo'),
     path('factura/', views.factura, name='factura'),
     path('ventas/', views.ventas, name='ventas'),
     path('ventas/dias', views.ventasDias, name='ventasDias'),
