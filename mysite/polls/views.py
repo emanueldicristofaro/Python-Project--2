@@ -170,7 +170,18 @@ def ventasDias(request):
 
 def ventasIngredientes(request):
 
-    return render(request, 'pedidos/ventas_ingredientes.html')
+    raw_query = '''
+                select polls_ingrediente.id_ingrediente, polls_ingrediente.nombreIngrediente AS Nombre, 
+                count(polls_ingrediente.id_ingrediente) AS Cantidad,
+                count(polls_ingrediente.id_ingrediente) * polls_ingrediente.costoIngrediente AS Monto
+                from polls_ingrediente , polls_sandwich , polls_sandwich_ingrediente 
+                where polls_sandwich_ingrediente.fk_sandwich_id = polls_sandwich.id_sandwich 
+                 and polls_sandwich_ingrediente.fk_ingrediente_id = polls_ingrediente.id_ingrediente
+                group by polls_ingrediente.nombreIngrediente
+        '''
+    
+    results = Ingrediente.objects.raw(raw_query)
+    return render(request, 'pedidos/ventas_ingredientes.html', {'resultado': results})
 
 #######################################################################
 
@@ -189,6 +200,15 @@ def ventasTamano(request):
 def ventasClientes(request):
 
     return render(request, 'pedidos/ventas_clientes.html')
+
+#######################################################################
+
+# Ventas por bebidas
+#######################################################################
+
+def ventasBebidas(request):
+
+    return render(request, 'pedidos/ventas_bebidas.html')
 
 #######################################################################
 
