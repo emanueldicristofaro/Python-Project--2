@@ -7,8 +7,8 @@ from .models import Pedido, Tamano, Ingrediente, Bebida, Sandwich, Sandwich_Ingr
 #######################################################################
 
 pedido = list()
-
-def insertPedido(pedido):
+cliente_nombre = list()
+def insertPedido(pedido, cliente):
 
     # Obtener fecha actual
     fechaActual = timezone.now()
@@ -17,7 +17,7 @@ def insertPedido(pedido):
     ingredients = []
     drinks = []
 
-    '''pedidoInsert = Pedido.objects.create(fechaPedido = fechaActual, nombreCliente = "Emanuel")'''
+    pedidoInsert = Pedido.objects.create(fechaPedido = fechaActual, nombreCliente = cliente)
 
     #Operaciones de insert
     for pe in pedido:
@@ -37,7 +37,7 @@ def insertPedido(pedido):
               drinks.append(value)
 
     #Insert in sandwich 
-    idCliente = Pedido.objects.get(nombreCliente = "Emanuel")
+    idCliente = Pedido.objects.get(nombreCliente = cliente)
     nombreClienteString = idCliente.nombreCliente    
         
     for s in size:
@@ -100,17 +100,20 @@ def index(request):
     return render(request, 'pedidos/index.html')
 
 def catalogo(request):
-    cliente = request.POST['client']
+    
     if request.method == 'POST':
-
+        if 'client' in request.POST:
+            cliente = request.POST['client']
+        else:
+            cliente = cliente_nombre[0]
         tamano = request.POST.get("size")
         lista_ingredientes = request.POST.getlist('ingredients')
         lista_bebidas = request.POST.getlist('drinks')
         if request.POST.get("actionbtn") == "end":
             
             #Realizar el insert
-
-            context = insertPedido(pedido)
+            pedido.pop(0)
+            context = insertPedido(pedido, cliente_nombre[0])
 
             # render para detalles del pedido
             pedido.clear()
@@ -121,14 +124,14 @@ def catalogo(request):
             return render(request, 'pedidos/factura.html')
 
         else:
+            cliente_nombre.append(cliente)
             sandwich = {
-
+                #"client": cliente,
                 "size": tamano,
                 "ingredients": lista_ingredientes,
                 "drinks": lista_bebidas
             }
             pedido.append(sandwich)
-            print(pedido)
 
     tamanos = Tamano.objects.all()
     ingredientes = Ingrediente.objects.all()
