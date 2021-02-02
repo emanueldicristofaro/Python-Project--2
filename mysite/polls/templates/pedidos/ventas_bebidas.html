@@ -42,43 +42,39 @@
           <a class="nav-link" href="{% url 'polls:ventasClientes' %}">Ventas por clientes</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'polls:ventasBebidas' %}">Ventas por bebidas</a>
-      </li>
+            <a class="nav-link" href="{% url 'polls:ventasBebidas' %}">Ventas por bebidas</a>
+        </li>
       </ul>
     </div>
   </nav>
   <div class="container py-5">
     <div class="row">
       <div class="col-md-12">
-        <h2 class="text-center mb-5">Ventas</h2>
+        <h2 class="text-center mb-5">Ventas por bebidas</h2>
         <div class="row">
           <div class="col-md-10 offset-md-1">
             <span class="anchor" id="formComplex"></span>
             <hr class="my-5">
             {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-
             <h4>Información</h4>
               
-
                   <table class="table">
                    <thead class="thead-dark">
                      <tr>
-                       
-                       <th scope="col">Ingrediente</th>
+                       <th scope="col">Bebidas</th>
                        <th scope="col">Cantidad</th>
                        <th scope="col">Monto (UM)</th>
                      </tr>
                    </thead>
                   
                    <tbody>
-                       <!--{% for i in resultado %}-->
+                       {% for i in resultado %}
                        <tr>
-                       
-                       <td></td>
-                       <td></td>
-                       <td></td>
+                       <td>{{i.nombreBebida}}</td>
+                       <td>{{i.Cantidad}}</td>
+                       <td>{{i.Monto}}</td>
                    </tr>
-                   <!--{% endfor %}-->
+                   {% endfor %}
                    </tbody>
                   
                </table>

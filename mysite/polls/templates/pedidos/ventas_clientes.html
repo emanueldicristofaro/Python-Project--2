@@ -41,6 +41,9 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'polls:ventasClientes' %}">Ventas por clientes</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'polls:ventasBebidas' %}">Ventas por bebidas</a>
+      </li>
       </ul>
     </div>
   </nav>
@@ -60,21 +63,23 @@
                    <thead class="thead-dark">
                      <tr>
                        
-                       <th scope="col">Ingrediente</th>
+                       <th scope="col">Cliente</th>
+                       <th scope="col">Tamaño</th>
                        <th scope="col">Cantidad</th>
                        <th scope="col">Monto (UM)</th>
                      </tr>
                    </thead>
                   
                    <tbody>
-                       <!--{% for i in resultado %}-->
+                       {% for i in resultado %}
                        <tr>
                        
-                       <td></td>
-                       <td></td>
-                       <td></td>
+                       <td>{{i.Cliente}}</td>
+                       <td>{{i.Tamano}}</td>
+                       <td>{{i.Cantidad}}</td>
+                       <td>{{i.Monto}}</td>
                    </tr>
-                   <!--{% endfor %}-->
+                   {% endfor %}
                    </tbody>
                   
                </table>

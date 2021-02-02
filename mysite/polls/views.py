@@ -109,6 +109,7 @@ def catalogo(request):
         tamano = request.POST.get("size")
         lista_ingredientes = request.POST.getlist('ingredients')
         lista_bebidas = request.POST.getlist('drinks')
+
         if request.POST.get("actionbtn") == "end":
             
             #Realizar el insert
@@ -131,6 +132,7 @@ def catalogo(request):
                 "ingredients": lista_ingredientes,
                 "drinks": lista_bebidas
             }
+
             pedido.append(sandwich)
 
     tamanos = Tamano.objects.all()
@@ -173,7 +175,18 @@ def ventasDias(request):
 
 def ventasIngredientes(request):
 
-    return render(request, 'pedidos/ventas_ingredientes.html')
+    raw_query = '''
+                select polls_ingrediente.id_ingrediente, polls_ingrediente.nombreIngrediente AS Nombre, 
+                count(polls_ingrediente.id_ingrediente) AS Cantidad,
+                count(polls_ingrediente.id_ingrediente) * polls_ingrediente.costoIngrediente AS Monto
+                from polls_ingrediente , polls_sandwich , polls_sandwich_ingrediente 
+                where polls_sandwich_ingrediente.fk_sandwich_id = polls_sandwich.id_sandwich 
+                 and polls_sandwich_ingrediente.fk_ingrediente_id = polls_ingrediente.id_ingrediente
+                group by polls_ingrediente.nombreIngrediente
+        '''
+    
+    results = Ingrediente.objects.raw(raw_query)
+    return render(request, 'pedidos/ventas_ingredientes.html', {'resultado': results})
 
 #######################################################################
 
@@ -182,7 +195,19 @@ def ventasIngredientes(request):
 
 def ventasTamano(request):
 
-    return render(request, 'pedidos/ventas_tamanos.html')
+    raw_query = '''
+                select polls_pedido.id_pedido, 
+                polls_tamano.nombreTamano Nombre, 
+                count(polls_sandwich.fk_tamano_id) Cantidad,
+                count(polls_sandwich.fk_tamano_id) * polls_tamano.costoTamano Monto
+                from  polls_pedido , polls_sandwich, polls_tamano 
+                where polls_sandwich.fk_pedido_id = polls_pedido.id_pedido and
+                polls_sandwich.fk_tamano_id = polls_tamano.id_tamano
+                group by polls_tamano.nombreTamano
+        '''
+    
+    results = Pedido.objects.raw(raw_query)
+    return render(request, 'pedidos/ventas_tamanos.html', {'resultado': results})
 
 #######################################################################
 
@@ -191,7 +216,40 @@ def ventasTamano(request):
 
 def ventasClientes(request):
 
-    return render(request, 'pedidos/ventas_clientes.html')
+    raw_query = '''
+                select polls_pedido.id_pedido, 
+                polls_pedido.nombreCliente Cliente,
+                polls_tamano.nombreTamano Tamano, 
+                count(polls_sandwich.fk_tamano_id) Cantidad,
+                count(polls_sandwich.fk_tamano_id) * polls_tamano.costoTamano Monto
+                from polls_pedido , polls_sandwich, polls_tamano 
+                where polls_sandwich.fk_pedido_id = polls_pedido.id_pedido and
+                polls_sandwich.fk_tamano_id = polls_tamano.id_tamano
+                group by polls_pedido.nombreCliente
+        '''
+    
+    results = Pedido.objects.raw(raw_query)
+    return render(request, 'pedidos/ventas_clientes.html', {'resultado': results})
+
+#######################################################################
+
+# Ventas por bebidas
+#######################################################################
+
+def ventasBebidas(request):
+
+    raw_query = '''
+                select polls_bebida.id_bebida, polls_bebida.nombreBebida AS Nombre, 
+                count(polls_bebida.id_bebida) AS Cantidad,
+                count(polls_bebida.id_bebida) * polls_bebida.costoBebida AS Monto
+                from polls_bebida , polls_sandwich , polls_bebida_sandwich
+                where polls_bebida_sandwich.fk_sandwich_id = polls_sandwich.id_sandwich 
+                 and polls_bebida_sandwich.fk_bebida_id = polls_bebida.id_bebida
+                group by polls_bebida.nombreBebida
+        '''
+    
+    results = Bebida.objects.raw(raw_query)
+    return render(request, 'pedidos/ventas_bebidas.html', {'resultado': results})
 
 #######################################################################
 
