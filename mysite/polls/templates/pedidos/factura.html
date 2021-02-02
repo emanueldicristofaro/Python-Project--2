@@ -61,8 +61,8 @@
             <form>
                 <div class="row">
                     <div class="col">
-                        <label for="out">Número de pedido</label>
-                        <input class="form-control" type="text" placeholder="" readonly>
+                        <label for="out">Número de pedido</label>                        
+                        <input class="form-control" type="text" placeholder="{{pedidoId.id_pedido}}" readonly>
                     </div>
                 </div>
             </form>
@@ -71,11 +71,11 @@
             <div class="row">
                 <div class="col">
                     <label for="out">Cliente</label>
-                    <input class="form-control " type="text" placeholder="" readonly>
+                    <input class="form-control" type="text" placeholder="{{pedidoId.nombreCliente}}" readonly>
                 </div>
                 <div class="col">
                     <label for="out">Fecha compra</label>
-                    <input type="text" class="form-control" placeholder="" readonly>
+                    <input type="text" class="form-control" placeholder="{{pedidoId.fechaPedido}}" readonly>
                 </div>
             </div>
            </form>

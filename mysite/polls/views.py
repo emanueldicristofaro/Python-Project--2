@@ -97,6 +97,7 @@ def insertPedido(pedido, cliente):
     return idCliente
 
 def index(request):
+    #pedido = Pedido.objects.get(nombreCliente = req)
     return render(request, 'pedidos/index.html')
 
 def catalogo(request):
@@ -114,15 +115,16 @@ def catalogo(request):
             
             #Realizar el insert
             pedido.pop(0)
-            context = insertPedido(pedido, cliente_nombre[0])
+            context = { 'pedidoId' : insertPedido(pedido, cliente_nombre[0]) }
 
             # render para detalles del pedido
             pedido.clear()
+            cliente_nombre.clear()
             print("post")
 
             # Redirigir a la pagina de fatura
         
-            return render(request, 'pedidos/factura.html')
+            return render(request, 'pedidos/factura.html', context)
 
         else:
             cliente_nombre.append(cliente)
@@ -147,7 +149,6 @@ def catalogo(request):
 #######################################################################
 
 def factura(request, pedido):
-
     return render(request, 'pedidos/factura.html')
 
 #######################################################################
