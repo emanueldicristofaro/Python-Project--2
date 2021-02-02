@@ -38,7 +38,7 @@ def insertPedido(pedido, cliente):
 
     #Insert in sandwich 
     idCliente = Pedido.objects.filter(nombreCliente = cliente)[Pedido.objects.filter(nombreCliente = cliente).count()-1]
-    nombreClienteString = idCliente.nombreCliente    
+    idClienteUsar = idCliente.id_pedido    
         
     for s in size:
         sizeId = Tamano.objects.get(id_tamano = s)
@@ -47,11 +47,9 @@ def insertPedido(pedido, cliente):
 
     #Insert bebidas in sandwich
 
-    QuerySandwichs = '''SELECT polls_sandwich.id_sandwich FROM polls_sandwich 
-    WHERE polls_sandwich.fk_pedido_id = (SELECT polls_pedido.id_pedido FROM polls_pedido WHERE polls_pedido.nombreCliente = %s)'''
-
-    listaSandwiches = Sandwich.objects.raw(QuerySandwichs, [nombreClienteString])
     listaSandwichesNueva = list()
+
+    listaSandwiches = Sandwich.objects.all().filter(fk_pedido_id = idClienteUsar)
 
     for sand in listaSandwiches:
         listaSandwichesNueva.append(sand.id_sandwich)
