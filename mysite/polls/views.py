@@ -3,7 +3,7 @@ from django.utils import timezone
 from .models import Pedido, Tamano, Ingrediente, Bebida, Sandwich, Sandwich_Ingrediente, Bebida_Sandwich
 
 
-# Pagina principal para que se traiga toda la data y las opciones de pedido
+# Metodo para realizar el insert del pedido en el sistema
 #######################################################################
 
 pedido = list()
@@ -96,9 +96,17 @@ def insertPedido(pedido, cliente):
       
     return idCliente
 
+# Pagina principal para introducir el nombre del cliente
+#######################################################################    
+
 def index(request):
     #pedido = Pedido.objects.get(nombreCliente = req)
     return render(request, 'pedidos/index.html')
+
+#######################################################################
+
+# Pagina principal para que se traiga toda la data y las opciones de pedido
+#######################################################################
 
 def catalogo(request):
     
@@ -115,7 +123,7 @@ def catalogo(request):
             
             #Realizar el insert
             pedido.pop(0)
-            context = { 'pedidoId' : insertPedido(pedido, cliente_nombre[0]) }
+            context = { 'pedidoId' : insertPedido(pedido, cliente_nombre[0])}
 
             # render para detalles del pedido
             pedido.clear()
