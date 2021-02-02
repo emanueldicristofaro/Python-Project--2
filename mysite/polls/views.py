@@ -8,7 +8,7 @@ from .models import Pedido, Tamano, Ingrediente, Bebida, Sandwich, Sandwich_Ingr
 
 pedido = list()
 
-def insertPedido(pedido):
+def insertPedido(pedido, cliente):
 
     # Obtener fecha actual
     fechaActual = timezone.now()
@@ -17,7 +17,7 @@ def insertPedido(pedido):
     ingredients = []
     drinks = []
 
-    '''pedidoInsert = Pedido.objects.create(fechaPedido = fechaActual, nombreCliente = "Emanuel")'''
+    pedidoInsert = Pedido.objects.create(fechaPedido = fechaActual, nombreCliente = "Emanuel")
 
     #Operaciones de insert
     for pe in pedido:
@@ -100,17 +100,20 @@ def index(request):
     return render(request, 'pedidos/index.html')
 
 def catalogo(request):
+
     cliente = request.POST['client']
+
     if request.method == 'POST':
 
         tamano = request.POST.get("size")
         lista_ingredientes = request.POST.getlist('ingredients')
         lista_bebidas = request.POST.getlist('drinks')
+
         if request.POST.get("actionbtn") == "end":
             
             #Realizar el insert
 
-            context = insertPedido(pedido)
+            context = insertPedido(pedido, cliente)
 
             # render para detalles del pedido
             pedido.clear()
@@ -127,6 +130,7 @@ def catalogo(request):
                 "ingredients": lista_ingredientes,
                 "drinks": lista_bebidas
             }
+
             pedido.append(sandwich)
             print(pedido)
 
@@ -190,7 +194,19 @@ def ventasIngredientes(request):
 
 def ventasTamano(request):
 
-    return render(request, 'pedidos/ventas_tamanos.html')
+    raw_query = '''
+                select polls_pedido.id_pedido, 
+                polls_tamano.nombreTamano Nombre, 
+                count(polls_sandwich.fk_tamano_id) Cantidad,
+                count(polls_sandwich.fk_tamano_id) * polls_tamano.costoTamano Monto
+                from  polls_pedido , polls_sandwich, polls_tamano 
+                where polls_sandwich.fk_pedido_id = polls_pedido.id_pedido and
+                polls_sandwich.fk_tamano_id = polls_tamano.id_tamano
+                group by polls_tamano.nombreTamano
+        '''
+    
+    results = Pedido.objects.raw(raw_query)
+    return render(request, 'pedidos/ventas_tamanos.html', {'resultado': results})
 
 #######################################################################
 
@@ -199,7 +215,20 @@ def ventasTamano(request):
 
 def ventasClientes(request):
 
-    return render(request, 'pedidos/ventas_clientes.html')
+    raw_query = '''
+                select polls_pedido.id_pedido, 
+                polls_pedido.nombreCliente Cliente,
+                polls_tamano.nombreTamano Tamano, 
+                count(polls_sandwich.fk_tamano_id) Cantidad,
+                count(polls_sandwich.fk_tamano_id) * polls_tamano.costoTamano Monto
+                from polls_pedido , polls_sandwich, polls_tamano 
+                where polls_sandwich.fk_pedido_id = polls_pedido.id_pedido and
+                polls_sandwich.fk_tamano_id = polls_tamano.id_tamano
+                group by polls_pedido.nombreCliente
+        '''
+    
+    results = Pedido.objects.raw(raw_query)
+    return render(request, 'pedidos/ventas_clientes.html', {'resultado': results})
 
 #######################################################################
 
@@ -208,7 +237,18 @@ def ventasClientes(request):
 
 def ventasBebidas(request):
 
-    return render(request, 'pedidos/ventas_bebidas.html')
+    raw_query = '''
+                select polls_bebida.id_bebida, polls_bebida.nombreBebida AS Nombre, 
+                count(polls_bebida.id_bebida) AS Cantidad,
+                count(polls_bebida.id_bebida) * polls_bebida.costoBebida AS Monto
+                from polls_bebida , polls_sandwich , polls_bebida_sandwich
+                where polls_bebida_sandwich.fk_sandwich_id = polls_sandwich.id_sandwich 
+                 and polls_bebida_sandwich.fk_bebida_id = polls_bebida.id_bebida
+                group by polls_bebida.nombreBebida
+        '''
+    
+    results = Bebida.objects.raw(raw_query)
+    return render(request, 'pedidos/ventas_bebidas.html', {'resultado': results})
 
 #######################################################################
 
