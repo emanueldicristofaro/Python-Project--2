@@ -37,7 +37,7 @@ def insertPedido(pedido, cliente):
               drinks.append(value)
 
     #Insert in sandwich 
-    idCliente = Pedido.objects.get(nombreCliente = cliente)
+    idCliente = Pedido.objects.filter(nombreCliente = cliente)[Pedido.objects.filter(nombreCliente = cliente).count()-1]
     nombreClienteString = idCliente.nombreCliente    
         
     for s in size:
