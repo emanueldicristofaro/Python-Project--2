@@ -47,14 +47,39 @@
   <div class="container py-5">
     <div class="row">
       <div class="col-md-12">
-        <h2 class="text-center mb-5">Ventas por día</h2>
+        <h2 class="text-center mb-5">Ventas por días</h2>
         <div class="row">
           <div class="col-md-10 offset-md-1">
             <span class="anchor" id="formComplex"></span>
             <hr class="my-5">
-            <h3>Detalles</h3>
-            <br>
             {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+            <h4>Información</h4>
+              
+
+                  <table class="table">
+                   <thead class="thead-dark">
+                     <tr>
+                       
+                       <th scope="col">Ingrediente</th>
+                       <th scope="col">Cantidad</th>
+                       <th scope="col">Monto (UM)</th>
+                     </tr>
+                   </thead>
+                  
+                   <tbody>
+                       <!--{% for i in resultado %}-->
+                       <tr>
+                       
+                       <td></td>
+                       <td></td>
+                       <td></td>
+                   </tr>
+                   <!--{% endfor %}-->
+                   </tbody>
+                  
+               </table>
+              
+           </div>     
             
           </div>
         </div>
