@@ -94,13 +94,18 @@ def insertPedido(pedido, cliente):
       
     return idCliente
 
+#######################################################################
+
+# Metodo para calcular el monto total del pedido
+#######################################################################
+
 def cacularPrecio(pedido):
     lista_sandwiches = Sandwich.objects.all().filter(fk_pedido_id = pedido.id_pedido)
     precio = 0
     for sandwich in lista_sandwiches:
         tamano = Tamano.objects.get(id_tamano = sandwich.fk_tamano_id)
         lista_bebidas = Bebida_Sandwich.objects.all().filter(fk_sandwich_id = sandwich.id_sandwich)
-        lista_ingredientes = Sandwich_Ingrediente.objects.all().filter(fk_sandwich_id = sandwich.id_sandwich)
+        lista_ingredientes = Sandwich_Ingrediente.objects.all().filter(fk_sandwich_id = sandwich.id_sandwich)        
         for bebidas in lista_bebidas:
             bebida = Bebida.objects.get(id_bebida = bebidas.fk_bebida_id)
             precio += bebida.costoBebida
@@ -110,6 +115,45 @@ def cacularPrecio(pedido):
         precio += tamano.costoTamano
     return precio
 
+#######################################################################
+
+# Metodo obtener los elementos del pedido para la factura
+#######################################################################
+
+def renderSandwiches(pedido):
+    lista_sandwiches = Sandwich.objects.all().filter(fk_pedido_id = pedido.id_pedido)
+    render_sandwiches = list()
+    for sandwich in lista_sandwiches:
+        precio = 0
+        tamano = Tamano.objects.get(id_tamano = sandwich.fk_tamano_id)
+        lista_bebidas = Bebida_Sandwich.objects.all().filter(fk_sandwich_id = sandwich.id_sandwich)
+        lista_ingredientes = Sandwich_Ingrediente.objects.all().filter(fk_sandwich_id = sandwich.id_sandwich)
+        render_bebidas = list()
+        render_ingredientes = list()
+
+        for bebidas in lista_bebidas:
+            bebida = Bebida.objects.get(id_bebida = bebidas.fk_bebida_id)
+            render_bebidas.append(bebida)
+            precio += bebida.costoBebida
+
+        for ingredientes in lista_ingredientes:
+            ingrediente = Ingrediente.objects.get(id_ingrediente = ingredientes.fk_ingrediente_id)
+            render_ingredientes.append(ingrediente)
+            precio += ingrediente.costoIngrediente
+
+        precio += tamano.costoTamano
+        diccionario = {
+            'sandwich' : sandwich.id_sandwich,
+            'tamano' : tamano.nombreTamano,
+            'tamano_precio' : tamano.costoTamano,
+            'bebidas' : render_bebidas,
+            'ingredientes' : render_ingredientes,
+            'precio' : precio
+        }
+        render_sandwiches.append(diccionario)
+    return render_sandwiches
+
+#######################################################################
 
 # Pagina principal para introducir el nombre del cliente
 #######################################################################    
@@ -140,12 +184,12 @@ def catalogo(request):
             pedido.pop(0)           
             pedidoId = insertPedido(pedido, cliente_nombre[0])            
             total = cacularPrecio(pedidoId)
-            context = { 'pedidoId' : pedidoId, 'total' : total}
+            sanduches = renderSandwiches(pedidoId)
+            context = { 'pedidoId' : pedidoId, 'total' : total, 'sanduches' : sanduches}
 
             # render para detalles del pedido
             pedido.clear()
             cliente_nombre.clear()
-            print("post")
 
             # Redirigir a la pagina de fatura
         
