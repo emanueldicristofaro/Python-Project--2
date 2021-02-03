@@ -56,32 +56,80 @@
             <span class="anchor" id="formComplex"></span>
             <hr class="my-5">
             {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-            <h4>Información</h4>
+            <h4>Ventas de tamaños por día</h4>
               
-
-                  <table class="table">
+                  <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
                    <thead class="thead-dark">
                      <tr>
                        
-                       <th scope="col">Ingrediente</th>
-                       <th scope="col">Cantidad</th>
+                       <th scope="col">Fecha</th>
+                       <th scope="col">Tamaño</th>
                        <th scope="col">Monto (UM)</th>
                      </tr>
                    </thead>
                   
                    <tbody>
-                       <!--{% for i in resultado %}-->
+                       {% for ta in tamanos %}
                        <tr>
                        
-                       <td></td>
-                       <td></td>
-                       <td></td>
+                       <td>{{ta.FechaTamano}}</td>
+                       <td>{{ta.nombreTamano}}</td>
+                       <td>{{ta.MontoTamano}}</td>
                    </tr>
-                   <!--{% endfor %}-->
+                   {% endfor %}
                    </tbody>
                   
                </table>
+               <br>
+               <h4>Ventas de ingredientes por día</h4>
               
+                  <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                   <thead class="thead-dark">
+                     <tr>
+                       
+                       <th scope="col">Fecha</th>
+                       <th scope="col">Ingredientes</th>
+                       <th scope="col">Monto (UM)</th>
+                     </tr>
+                   </thead>
+                  
+                   <tbody>
+                       {% for ing in ingredientes %}
+                       <tr>
+                       
+                       <td>{{ing.fechaIngrediente}}</td>
+                       <td>{{ing.nombreIngrediente}}</td>
+                       <td>{{ing.montoIngrediente}}</td>
+                   </tr>
+                   {% endfor %}
+                   </tbody>
+                  
+               </table>
+               <br>
+               <h4>Ventas de bebidas por día</h4>
+              
+                  <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                   <thead class="thead-dark">
+                     <tr>
+                       
+                       <th scope="col">Fecha</th>
+                       <th scope="col">Bebidas</th>
+                       <th scope="col">Monto (UM)</th>
+                     </tr>
+                   </thead>
+                  
+                   <tbody>
+                       {% for be in bebidas %}
+                       <tr>
+                       
+                       <td>{{be.fechaBebida}}</td>
+                       <td>{{be.nombreBebida}}</td>
+                       <td>{{be.montoBebida}}</td>
+                   </tr>
+                   {% endfor %}
+                   </tbody>
+                  
+               </table>
            </div>     
             
           </div>
@@ -105,5 +153,6 @@
   </div>
   {% bootstrap_javascript jquery='full' %}
 </body>
+
 
 </html>

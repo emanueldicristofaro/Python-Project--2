@@ -192,7 +192,30 @@ def ventas(request):
 
 def ventasDias(request):
 
-    return render(request, 'pedidos/ventas_dias.html')
+    tamanoQuery = ''' SELECT polls_pedido.id_pedido, polls_pedido.fechaPedido as FechaTamano, sum(polls_tamano.costoTamano) as MontoTamano, polls_tamano.nombreTamano as nombreTamano 
+                FROM polls_pedido, polls_tamano, polls_sandwich 
+                WHERE polls_pedido.id_pedido = polls_sandwich.fk_pedido_id and polls_sandwich.fk_tamano_id = polls_tamano.id_tamano
+                GROUP BY polls_pedido.fechaPedido, polls_tamano.nombreTamano '''
+
+    tamanoResults = Pedido.objects.raw(tamanoQuery)
+
+    ingredienteQuery = '''SELECT polls_pedido.id_pedido, polls_pedido.fechaPedido as fechaIngrediente, sum(polls_ingrediente.costoIngrediente) as montoIngrediente, polls_ingrediente.nombreIngrediente as nombreIngrediente 
+                        FROM polls_pedido, polls_ingrediente, polls_sandwich, polls_sandwich_ingrediente
+                        WHERE polls_pedido.id_pedido = polls_sandwich.fk_pedido_id and polls_sandwich.id_sandwich = polls_sandwich_ingrediente.fk_sandwich_id and 
+                        polls_sandwich_ingrediente.fk_ingrediente_id = polls_ingrediente.id_ingrediente
+                        GROUP BY polls_pedido.fechaPedido, polls_ingrediente.nombreIngrediente'''
+
+    ingredienteResults = Pedido.objects.raw(ingredienteQuery)
+
+    bebidaQuery = '''SELECT polls_pedido.id_pedido, polls_pedido.fechaPedido as fechaBebida, sum(polls_bebida.costoBebida) as montoBebida, polls_bebida.nombreBebida as nombreBebida
+                    FROM polls_pedido, polls_bebida, polls_sandwich, polls_bebida_sandwich
+                    WHERE polls_pedido.id_pedido = polls_sandwich.fk_pedido_id and polls_sandwich.id_sandwich = polls_bebida_sandwich.fk_sandwich_id and 
+                    polls_bebida_sandwich.fk_bebida_id = polls_bebida.id_bebida
+                    GROUP BY polls_pedido.fechaPedido, polls_bebida.nombreBebida'''
+
+    bebidaResults = Pedido.objects.raw(bebidaQuery)
+
+    return render(request, 'pedidos/ventas_dias.html', {'tamanos': tamanoResults, 'ingredientes': ingredienteResults, 'bebidas': bebidaResults})
 
 #######################################################################
 
