@@ -164,7 +164,17 @@ def factura(request, pedido):
 
 def ventas(request):
 
-    return render(request, 'pedidos/ventas.html')
+    raw_query = '''SELECT polls_pedido.id_pedido, polls_pedido.nombreCliente as nombre, polls_pedido.fechaPedido as fecha, 
+    ((count(polls_tamano.nombreTamano) * polls_tamano.costoTamano) + (count(polls_bebida.nombreBebida) * polls_bebida.costoBebida) + (count(polls_ingrediente.nombreIngrediente) * polls_ingrediente.costoIngrediente)) as monto
+    FROM polls_pedido, polls_sandwich, polls_bebida, polls_tamano, polls_bebida_sandwich, polls_sandwich_ingrediente, polls_ingrediente
+    WHERE polls_pedido.id_pedido = polls_sandwich.fk_pedido_id and polls_sandwich.fk_tamano_id = polls_tamano.id_tamano and 
+    polls_sandwich.id_sandwich = polls_sandwich_ingrediente.fk_sandwich_id and polls_sandwich_ingrediente.fk_ingrediente_id = polls_ingrediente.id_ingrediente and 
+    polls_sandwich.id_sandwich = polls_bebida_sandwich.fk_sandwich_id and polls_bebida_sandwich.fk_bebida_id = polls_bebida.id_bebida
+    GROUP BY polls_pedido.nombreCliente'''
+    
+    results = Pedido.objects.raw(raw_query)
+
+    return render(request, 'pedidos/ventas.html', {'resultado': results})
 
 #######################################################################
 
