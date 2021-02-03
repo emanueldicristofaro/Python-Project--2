@@ -60,7 +60,7 @@ class Bebida(models.Model):
     def cantidad_bebidas(self):
         return len(self.bebida_sandwich_set.all())
 
-    def costoBebida(self):
+    def costoBebidas(self):
         cont = 0
         for beb in self.bebida_sandwich_set.all().filter()[0:]:
             cont = cont + beb.id_bebida.getCostoBebida()
