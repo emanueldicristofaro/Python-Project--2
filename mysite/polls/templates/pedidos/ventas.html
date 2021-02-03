@@ -66,7 +66,7 @@
                        
                        <th scope="col">Cliente</th>
                        <th scope="col">Fecha de pedido</th>
-                       <th scope="col">Monto (UM)</th>
+                       <th scope="col">Monto (UM) total del pedido</th>
                      </tr>
                    </thead>
                   
@@ -74,9 +74,9 @@
                        {% for i in resultado %}
                        <tr>
                        
-                       <td>{{i.nombre}}</td>
+                       <td>{{i.cliente}}</td>
                        <td>{{i.fecha}}</td>
-                       <td>{{i.monto}}</td>
+                       <td>{{i.precio}}</td>
                    </tr>
                    {% endfor %}
                    </tbody>
