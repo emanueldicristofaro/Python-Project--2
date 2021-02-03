@@ -284,7 +284,7 @@ def ventasClientes(request):
                 from polls_pedido , polls_sandwich, polls_tamano 
                 where polls_sandwich.fk_pedido_id = polls_pedido.id_pedido and
                 polls_sandwich.fk_tamano_id = polls_tamano.id_tamano
-                group by polls_pedido.nombreCliente
+                group by polls_tamano.nombreTamano
         '''
     
     results = Pedido.objects.raw(raw_query)
