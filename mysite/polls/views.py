@@ -94,6 +94,23 @@ def insertPedido(pedido, cliente):
       
     return idCliente
 
+def cacularPrecio(pedido):
+    lista_sandwiches = Sandwich.objects.all().filter(fk_pedido_id = pedido.id_pedido)
+    precio = 0
+    for sandwich in lista_sandwiches:
+        tamano = Tamano.objects.get(id_tamano = sandwich.fk_tamano_id)
+        lista_bebidas = Bebida_Sandwich.objects.all().filter(fk_sandwich_id = sandwich.id_sandwich)
+        lista_ingredientes = Sandwich_Ingrediente.objects.all().filter(fk_sandwich_id = sandwich.id_sandwich)
+        for bebidas in lista_bebidas:
+            bebida = Bebida.objects.get(id_bebida = bebidas.fk_bebida_id)
+            precio += bebida.costoBebida
+        for ingredientes in lista_ingredientes:
+            ingrediente = Ingrediente.objects.get(id_ingrediente = ingredientes.fk_ingrediente_id)
+            precio += ingrediente.costoIngrediente
+        precio += tamano.costoTamano
+    return precio
+
+
 # Pagina principal para introducir el nombre del cliente
 #######################################################################    
 
@@ -120,8 +137,10 @@ def catalogo(request):
         if request.POST.get("actionbtn") == "end":
             
             #Realizar el insert
-            pedido.pop(0)
-            context = { 'pedidoId' : insertPedido(pedido, cliente_nombre[0])}
+            pedido.pop(0)           
+            pedidoId = insertPedido(pedido, cliente_nombre[0])            
+            total = cacularPrecio(pedidoId)
+            context = { 'pedidoId' : pedidoId, 'total' : total}
 
             # render para detalles del pedido
             pedido.clear()
